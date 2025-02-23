@@ -4,6 +4,7 @@ import plotly.express as px
 import requests
 import datetime
 import pytz
+from humberback_whale import migration_page
 
 # ✅ Streamlit Page Configuration
 st.set_page_config(page_title="Ocean Data Dashboard", layout="wide")
@@ -11,7 +12,7 @@ st.set_page_config(page_title="Ocean Data Dashboard", layout="wide")
 # API Configuration
 API_URL = "https://data.oceannetworks.ca/api/scalardata/device"
 DEFAULT_TIME_RANGE = "Past 10 Minutes"
-API_TOKEN = "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"  
+API_TOKEN = "xxxxxxxxxxxxxxxxxxxxxxxx"  
 DEVICE_CODE = "SBEDSPHOXV2SN7212038"
 ROW_LIMIT = 10000
 OUTPUT_FORMAT = "array"
@@ -135,6 +136,10 @@ def process_api_data(data):
         st.error(f"Error processing data: {e}")
         return pd.DataFrame()
 
+# Main Navigation
+st.sidebar.title("Navigation")
+page = st.sidebar.radio("Select Page", ["Ocean Data Dashboard", "Humpback Migration"])
+
 # Sidebar for user input
 st.sidebar.header("Filter Options")
 time_range = st.sidebar.selectbox("Select Time Range", ["Past 10 Minutes", "Past 2 Hours", "Past 24 Hours", "Past 7 Days", "Past 1 Month", "Past 6 Months", "Past 1 Year", "All Available Data"])
@@ -151,23 +156,28 @@ if st.sidebar.button("Fetch Data"):
 
 df = st.session_state.df
 
-# Title
-st.title("🌊 Ocean Data Dashboard")
-st.write("This dashboard provides insights into ocean health using real-time sensor data.")
+if page == "Ocean Data Dashboard":
+    # Title
+    st.title("🌊 Ocean Data Dashboard")
+    st.write("This dashboard provides insights into ocean health using real-time sensor data.")
 
-if not df.empty:
-    st.subheader("📉 Ocean Acidification Trends")
-    fig1 = px.line(df, x="Time (Atlantic)", y="External pH (Dynamic Salinity)", title="pH Level Over Time (Atlantic Time)")
-    st.plotly_chart(fig1)
+    if not df.empty:
+        st.subheader("📉 Ocean Acidification Trends")
+        fig1 = px.line(df, x="Time (Atlantic)", y="External pH (Dynamic Salinity)", title="pH Level Over Time (Atlantic Time)")
+        st.plotly_chart(fig1)
 
-    st.subheader("🌍 Hypoxia Risk Zones (Low Oxygen Levels)")
-    fig2 = px.scatter(df, x="Time (Atlantic)", y="Oxygen Concentration Corrected", 
-                      color="Oxygen Concentration Corrected",
-                      title="Oxygen Concentration Over Time (Atlantic Time)")
-    st.plotly_chart(fig2)
+        st.subheader("🌍 Hypoxia Risk Zones (Low Oxygen Levels)")
+        fig2 = px.scatter(df, x="Time (Atlantic)", y="Oxygen Concentration Corrected", 
+                          color="Oxygen Concentration Corrected",
+                          title="Oxygen Concentration Over Time (Atlantic Time)")
+        st.plotly_chart(fig2)
 
-    st.subheader("🌡️ Internal Temperature Over Time")
-    fig3 = px.line(df, x="Time (Atlantic)", y="Internal Temperature", title="Internal Temperature Over Time (Atlantic Time)")
-    st.plotly_chart(fig3)
-else:
-    st.write("No data available. Please fetch real-time data.")
+        st.subheader("🌡️ Internal Temperature Over Time")
+        fig3 = px.line(df, x="Time (Atlantic)", y="Internal Temperature", title="Internal Temperature Over Time (Atlantic Time)")
+        st.plotly_chart(fig3)
+    else:
+        st.write("No data available. Please fetch real-time data.")
+
+elif page == "Humpback Migration":
+    migration_page()
+

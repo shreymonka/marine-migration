@@ -6,7 +6,6 @@ import datetime
 import pytz
 from humpback_whale import migration_page
 
-# ✅ Streamlit Page Configuration
 st.set_page_config(page_title="Whale Watch", layout="wide")
 
 # API Configuration

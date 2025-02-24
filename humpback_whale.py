@@ -7,11 +7,132 @@ import numpy as np
 from pathlib import Path
 import os
 
-# Get the directory of the current script
 CURRENT_DIR = Path(__file__).parent.absolute()
 IMAGE_PATH = os.path.join(CURRENT_DIR, "assets", "humpback_whale.jpeg")
 
-# Define prey data
+FEEDING_FACTORS = ["Chlorophyll", "External pH (Dynamic Salinity)", "Temperature"]
+BREEDING_FACTORS = ["Temperature", "External pH (Dynamic Salinity)", "Oxygen Concentration Corrected"]
+
+def preprocess_data(df, factors):
+    """Preprocess the data before visualization."""
+    df = df.dropna(subset=factors)
+    return df
+
+def create_conditions_chart(df, factors, title, colors):
+    """Create a simple and clean time-series graph showing environmental factors over time."""
+    fig = go.Figure()
+    
+    for factor in factors:
+        fig.add_trace(go.Scatter(
+            x=df["Time (Atlantic)"],
+            y=df[factor],
+            name=factor,
+            line=dict(color=colors[factor], width=2)
+        ))
+    
+    fig.update_layout(
+        title=title,
+        xaxis=dict(title="Time (Atlantic)", showgrid=False),
+        yaxis=dict(title="Environmental Factor Levels", showgrid=False),
+        legend=dict(
+            x=0.01, y=0.99, bgcolor="rgba(255, 255, 255, 0.6)", bordercolor="black", borderwidth=1
+        ),
+        plot_bgcolor="white",
+        height=500
+    )
+    return fig
+
+def feeding_conditions_page():
+    """Feeding conditions dashboard section"""
+    st.title("🐋 Feeding Conditions")
+    st.info("""
+    This section visualizes key environmental factors affecting humpback whale feeding behavior.
+    """)
+    
+    if "df" in st.session_state and not st.session_state.df.empty:
+        st.session_state.df = preprocess_data(st.session_state.df, FEEDING_FACTORS)
+        
+        st.plotly_chart(create_conditions_chart(st.session_state.df, FEEDING_FACTORS, "🌊 Feeding Conditions Over Time", {"Chlorophyll": "#2ca02c", "External pH (Dynamic Salinity)": "#1f77b4", "Temperature": "#ff7f0e"}), use_container_width=True)
+        
+        st.subheader("🐳 How These Factors Affect Whale Feeding")
+        st.markdown("""
+        ### 🌿 Chlorophyll-a Concentration: Nature’s Buffet Table!
+        - More chlorophyll = **More plankton = More food for krill and small fish!**  
+        - Humpback whales **follow the buffet** to feast on nutrient-rich areas. 🐟🐋
+
+
+        ### ⚖️ pH Levels: The Ocean’s Recipe for a Healthy Food Chain
+        - If the ocean gets too acidic, **krill populations drop**, affecting the entire food chain. 😱
+        - A stable pH (7.5 - 8.5) keeps marine life **happy and thriving**! 🌊
+
+
+        ### 🌡️ Temperature: The Secret to a Perfect Feeding Spot
+        - Cooler waters bring **nutrients to the surface**, **attracting plankton and prey**.  
+        - **5°C - 15°C**? That’s the **Goldilocks zone** for humpback whales! 🏊‍♂️🐳
+
+
+        ### 🌊 Ocean Currents and Upwelling Zones: The Whale’s GPS
+        - Cold, nutrient-rich waters rise up, fueling the entire ecosystem.  
+        - Humpbacks **prefer regions with high biological productivity**—it’s like finding the best seafood restaurant! 🍣🐋
+
+
+        ### 🦐 Prey Density and Distribution: The Whale’s Shopping List
+        - **Krill, capelin, and herring** are the top picks for a hungry humpback.  
+        - Whales follow **prey migration patterns** to find their next meal. 🎯🐟
+
+
+        ### 🫧 Oxygen Concentration: The Ocean’s Breathing Room
+        - Higher oxygen = **better conditions for prey species**.  
+        - Whales thrive in **moderate oxygen zones**—too low and the prey disappears! 🏊‍♂️🐳
+        
+        """)
+    else:
+        st.warning("No data available. Ensure the API has fetched data in app.py.")
+
+def breeding_conditions_page():
+    """Breeding conditions dashboard section"""
+    st.title("🐋 Breeding Conditions")
+    st.info("""
+    This section visualizes key environmental factors affecting humpback whale breeding behavior.
+    """)
+    
+    if "df" in st.session_state and not st.session_state.df.empty:
+        st.session_state.df = preprocess_data(st.session_state.df, BREEDING_FACTORS)
+        
+        st.plotly_chart(create_conditions_chart(st.session_state.df, BREEDING_FACTORS, "🌊 Breeding Conditions Over Time", {"Temperature": "#ff7f0e", "External pH (Dynamic Salinity)": "#1f77b4", "Oxygen Concentration Corrected": "#2ca02c"}), use_container_width=True)
+        
+        st.subheader("🐳 How These Factors Affect Whale Breeding")
+        st.markdown("""
+        ### 🌡️ Temperature: Love in the Warm Waters!
+        - Whales migrate to warmer tropical waters to breed. **25°C - 28°C** is the ideal range for calf development! 🐋💙
+        
+        ### ⚖️ Salinity: Stable Waters for Newborns
+        - Higher salinity provides a **stable environment** for newborn calves.
+        - It influences **calf buoyancy** and early development. 🌊🍼
+        
+        ### 🫧 Oxygen Levels: A Breath of Fresh Air
+        - Higher oxygen = **better conditions for young whales and mothers**.
+        - Oxygen-rich waters **support energy levels** for nursing mothers. 🏊‍♀️🐳
+        
+        ### 🦐 Can Prey Availability Affect Breeding?
+        - If food is scarce, females may **delay pregnancy** or give birth to undernourished calves.
+        - Humpbacks prefer areas where **prey is abundant before migration** to store enough energy.
+        
+        ### 🌊 Why Warmer Waters for Breeding?
+        - Warm waters **reduce energy loss** for newborn calves.
+        - It minimizes **predator presence**, making it safer for young whales.
+
+        ### 🧐 How Does Ocean Salinity Play a Role?"
+        - Stable salinity helps newborns **float easily**, reducing energy spent on movement. 🍼🌊  
+        - It prevents **dehydration** and ensures smooth **nursing** for calves. 🐳💙  
+
+        ### 🚨 What if Oxygen Levels Drop?
+        - **Low oxygen** can cause **stress** for both mother and calf. 😟🫧  
+        - Oxygen-rich waters **support high energy needs** for nursing mothers, keeping them **healthy and strong**! 💪🐋  
+        """)
+    else:
+        st.warning("No data available. Ensure the API has fetched data in app.py.")
+
 PREY_DATA = {
     "Capelin": {
         "temp_range": {"min": 2, "max": 12},
@@ -42,19 +163,18 @@ def create_environmental_figure(df):
     """Create a combined figure for all environmental parameters"""
     fig = go.Figure()
     
-    # Add traces for each parameter
     fig.add_trace(go.Scatter(
         x=df["Time (Atlantic)"],
         y=df["Temperature"],
         name="Temperature (°C)",
-        line=dict(color="#FF4B4B", width=2)  # Red
+        line=dict(color="#FF4B4B", width=2) 
     ))
     
     fig.add_trace(go.Scatter(
         x=df["Time (Atlantic)"],
         y=df["External pH (Dynamic Salinity)"],
         name="pH",
-        line=dict(color="#36A2EB", width=2),  # Blue
+        line=dict(color="#36A2EB", width=2),  
         yaxis="y2"
     ))
     
@@ -62,7 +182,7 @@ def create_environmental_figure(df):
         x=df["Time (Atlantic)"],
         y=df["Oxygen Concentration Corrected"],
         name="Oxygen (ml/l)",
-        line=dict(color="#4BC0C0", width=2),  # Teal
+        line=dict(color="#4BC0C0", width=2),  
         yaxis="y3"
     ))
     
@@ -71,11 +191,10 @@ def create_environmental_figure(df):
             x=df["Time (Atlantic)"],
             y=df["Chlorophyll"],
             name="Chlorophyll",
-            line=dict(color="#9966FF", width=2),  # Purple
+            line=dict(color="#9966FF", width=2), 
             yaxis="y4"
         ))
 
-    # Update layout with multiple y-axes
     fig.update_layout(
         title="Environmental Parameters Over Time",
         xaxis=dict(
@@ -134,7 +253,6 @@ def create_environmental_figure(df):
         height=600
     )
 
-    # Add grid for better readability
     fig.update_xaxes(showgrid=True, gridwidth=1, gridcolor="LightGray")
     fig.update_yaxes(showgrid=True, gridwidth=1, gridcolor="LightGray")
     
@@ -146,15 +264,14 @@ def create_simplified_species_chart():
     current_month = datetime.now().month - 1
     
     colors = {
-        'Humpback': '#1f77b4',  # Blue
-        'Capelin': '#2ca02c',   # Green
-        'Krill': '#ff7f0e',     # Orange
-        'Herring': '#9467bd'    # Purple
+        'Humpback': '#1f77b4',  
+        'Capelin': '#2ca02c',   
+        'Krill': '#ff7f0e',     
+        'Herring': '#9467bd'    
     }
 
     fig = go.Figure()
 
-    # Add traces for each species
     species_data = [
         ('🐋 Humpback Whales', [0, 0, 0, 0, 1, 2, 3, 3, 2, 1, 0, 0], 'Humpback'),
         ('🐟 Capelin', [0, 0, 0, 0, 1, 3, 3, 2, 1, 0, 0, 0], 'Capelin'),
@@ -170,7 +287,6 @@ def create_simplified_species_chart():
             marker_color=colors[color_key]
         ))
 
-    # Update layout
     fig.update_layout(
         title=dict(
             text='Species Presence Throughout the Year',
@@ -202,7 +318,6 @@ def create_simplified_species_chart():
         )
     )
 
-    # Add current month indicator
     fig.add_vline(
         x=current_month,
         line_dash="dash",
@@ -235,7 +350,7 @@ def show_condition_alerts(df):
             if temp < min_temp or temp > max_temp:
                 st.warning(f"⚠️ Temperature ({temp:.1f}°C) is outside optimal range for {species} ({min_temp}°C - {max_temp}°C)")
                 alerts_shown = True
-            elif current_month in [6, 7, 8]:  # Summer months
+            elif current_month in [6, 7, 8]: 
                 st.success(f"✅ Current conditions are optimal for {species}")
                 alerts_shown = True
         
@@ -312,7 +427,6 @@ def show_whale_lifecycle():
     st.header("🐋 Humpback Whale Lifecycle")
     st.markdown("Explore the interactive lifecycle phases of humpback whales. Click on each tab to view details, then use the buttons to learn even more about each phase.")
 
-    # Create tabs for each lifecycle phase
     tabs = st.tabs(["Breeding Phase", "Feeding Phase", "Migration Phase", "Resting Phase"])
     
     with tabs[0]:
@@ -397,15 +511,14 @@ def migration_page():
         tab1, tab2, tab3, tab4, tab5 = st.tabs([
             "ℹ️ About",
             "🌊 Phases",
-            "📊 Environmental Conditions",
+            "📊 Feeding Conditions",
             "🗓️ Migration Patterns",
-            "🐟 Prey Species"
+            "🐟 Breeding Conditions"
         ])
 
         with tab1:
             st.header("About Humpback Whales")
             
-            # Use two columns: left for the image, right for species overview
             col1, col2 = st.columns(2)
             
             with col1:
@@ -460,9 +573,7 @@ def migration_page():
             show_whale_lifecycle()
 
         with tab3:
-            show_metrics(df)
-            st.plotly_chart(create_environmental_figure(df), use_container_width=True)
-            show_condition_alerts(df)
+            feeding_conditions_page()
 
         with tab4:
             st.plotly_chart(create_simplified_species_chart(), use_container_width=True)
@@ -471,37 +582,29 @@ def migration_page():
             with col1:
                 st.markdown("""
                 ### Presence Level Guide
-                - **0:** Absent
-                - **1:** Low Presence
-                - **2:** Medium Presence
-                - **3:** High Presence
+                - **0**: Absent
+                - **1**: Low Presence
+                - **2**: Medium Presence
+                - **3**: High Presence
                 """)
             with col2:
                 st.markdown("""
                 ### Peak Activity Periods
-                - 🐋 **Whales:** June - August
-                - 🐟 **Capelin:** June - July
-                - 🦐 **Krill:** April - September
-                - 🐠 **Herring:** May & August - September
+                - 🐋 **Whales**: June - August
+                - 🐟 **Capelin**: June - July
+                - 🦐 **Krill**: April - September
+                - 🐠 **Herring**: May & August - September
                 """)
             
             st.info("""
             ### Environmental Influences on Migration
-            - 🌊 Water temperature triggers movement patterns  
-            - 🐟 Prey availability affects whale presence  
+            - 🌊 Water temperature triggers movement patterns
+            - 🐟 Prey availability affects whale presence
             - 🌡️ Seasonal changes impact all species
             """)
 
         with tab5:
-            st.subheader("Key Prey Species in Holyrood Waters")
-            show_species_info()
-            
-            st.info("""
-            ### Environmental Factors Affecting Migration
-            - 🌊 Water temperature influences capelin spawning timing  
-            - 🌡️ Krill distribution varies with water column stratification  
-            - 🐋 Humpback arrival typically correlates with capelin presence
-            """)
+            breeding_conditions_page()
     else:
         st.warning("No data available. Please fetch real-time data using the sidebar controls.")
 

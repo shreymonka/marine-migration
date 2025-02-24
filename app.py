@@ -12,7 +12,7 @@ st.set_page_config(page_title="Humpback Migration Dashboard", layout="wide")
 # API Configuration
 API_URL = "https://data.oceannetworks.ca/api/scalardata/device"
 DEFAULT_TIME_RANGE = "Past 10 Minutes"
-API_TOKEN = "xxxxxxxxxxxxxxxxxxxxxxxxxxxxx"  
+API_TOKEN = "492d6df3-c559-4e2b-8da0-1263e326ae1f"  
 DEVICE_CODES = {
     "standard": "SBEDSPHOXV2SN7212038",
     "fluorometer": "TURNERCYCLOPS7F-900143"
@@ -56,7 +56,7 @@ def fetch_data(time_range):
         "token": API_TOKEN,
     }
 
-    # Add resampling if needed
+
     if time_range == "Past 6 Months":
         base_params["resamplePeriod"] = 86400
     elif time_range == "Past 1 Year" or time_range == "All Available Data":
@@ -64,7 +64,6 @@ def fetch_data(time_range):
 
     data = {}
 
-    # Fetch standard device data
     standard_params = base_params.copy()
     standard_params["deviceCode"] = DEVICE_CODES["standard"]
     response = requests.get(API_URL, params=standard_params)
@@ -111,7 +110,6 @@ def process_api_data(data):
             "Chlorophyll"
         ]
 
-        # Process standard sensors
         if "sensorData" in data:
             for sensor in data["sensorData"]:
                 if "data" in sensor and "sampleTimes" in sensor["data"]:
@@ -121,7 +119,6 @@ def process_api_data(data):
         if time_values is None:
             return pd.DataFrame()
 
-        # Convert timestamps
         utc_times = pd.to_datetime(time_values)
         if utc_times.tz is None:
             utc_times = utc_times.tz_localize(pytz.utc)
@@ -139,7 +136,6 @@ def process_api_data(data):
                         values += [None] * (len(time_values) - len(values))
                     processed_data[sensor_name] = values
 
-        # Process chlorophyll data
         if "chlorophyll" in data and "sensorData" in data["chlorophyll"]:
             for sensor in data["chlorophyll"]["sensorData"]:
                 if sensor.get("sensorName") == "Chlorophyll":
@@ -153,7 +149,6 @@ def process_api_data(data):
 
         df = pd.DataFrame(processed_data)
 
-        # Ensure all expected sensors exist
         for sensor in expected_sensors:
             if sensor not in df.columns:
                 df[sensor] = None
@@ -163,13 +158,11 @@ def process_api_data(data):
         st.error(f"Error processing data: {e}")
         return pd.DataFrame()
 
-# Initialize or update data
 if "df" not in st.session_state:
     with st.spinner("Fetching initial data..."):
         api_data = fetch_data(DEFAULT_TIME_RANGE)
         st.session_state.df = process_api_data(api_data)
 
-# Sidebar for user input
 st.sidebar.header("Filter Options")
 time_range = st.sidebar.selectbox(
     "Select Time Range",
@@ -182,17 +175,13 @@ if st.sidebar.button("Fetch Data"):
         api_data = fetch_data(time_range)
         st.session_state.df = process_api_data(api_data)
 
-# Main Navigation in sidebar - Below the time range selector
-st.sidebar.markdown("---")  # Add a separator
+st.sidebar.markdown("---")
 page = st.sidebar.radio("View", ["Humpback Migration", "Ocean Data Dashboard"])
 
-# Display the selected page
 if page == "Humpback Migration":
-    # Add an auto-scroll to top
     st.markdown('<div id="top"></div>', unsafe_allow_html=True)
     migration_page()
 else:
-    # Ocean Data Dashboard code
     st.title("🌊 Ocean Data Dashboard")
     st.write("This dashboard provides insights into ocean health using real-time sensor data.")
 

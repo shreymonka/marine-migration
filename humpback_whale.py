@@ -520,44 +520,14 @@ def migration_page():
     df = st.session_state.df if "df" in st.session_state else pd.DataFrame()
     
     if not df.empty:
-        # tab1, tab2, tab3, tab4, tab5, tab6 = st.tabs([
-        #     "ℹ️ About",
-        #     "🌊 Phases",
-        #     "📊 Feeding Conditions",
-        #     "🗓️ Migration Patterns",
-        #     "🐟 Breeding Conditions",
-        #     "📚 Data Sources"
-        # ])
-        tab_options = ["ℹ️ About", "🌊 Phases", "📊 Feeding Conditions", "🗓️ Migration Patterns", "🐟 Breeding Conditions",
-                       "📚 Data Sources"]
-
-        # Store active tab in session state
-        if "selected_tab" not in st.session_state:
-            st.session_state.selected_tab = tab_options[0]  # Default to first tab
-
-        # Create tab selection using radio buttons to persist tab state
-        st.session_state.selected_tab = st.radio("Select Tab", tab_options,
-                                                 index=tab_options.index(st.session_state.selected_tab))
-
-        # Display content based on selected tab
-        if st.session_state.selected_tab == "ℹ️ About":
-            st.header("About Humpback Whales")
-            # Content for About tab...
-
-        elif st.session_state.selected_tab == "🌊 Phases":
-            show_whale_lifecycle()
-
-        elif st.session_state.selected_tab == "📊 Feeding Conditions":
-            feeding_conditions_page()
-
-        elif st.session_state.selected_tab == "🗓️ Migration Patterns":
-            st.plotly_chart(create_simplified_species_chart(), use_container_width=True)
-
-        elif st.session_state.selected_tab == "🐟 Breeding Conditions":
-            breeding_conditions_page()
-
-        elif st.session_state.selected_tab == "📚 Data Sources":
-            st.header("📚 Data Sources")
+        tab1, tab2, tab3, tab4, tab5, tab6 = st.tabs([
+            "ℹ️ About",
+            "🌊 Phases",
+            "📊 Feeding Conditions",
+            "🗓️ Migration Patterns",
+            "🐟 Breeding Conditions",
+            "📚 Data Sources"
+        ])
     
         with tab1:
             st.header("About Humpback Whales")

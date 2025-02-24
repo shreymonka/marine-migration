@@ -6,16 +6,16 @@ import datetime
 import pytz
 from humpback_whale import migration_page
 
-# Streamlit Page Configuration
-st.set_page_config(page_title="Ocean Data Dashboard", layout="wide")
+# ✅ Streamlit Page Configuration
+st.set_page_config(page_title="Humpback Migration Dashboard", layout="wide")
 
 # API Configuration
 API_URL = "https://data.oceannetworks.ca/api/scalardata/device"
 DEFAULT_TIME_RANGE = "Past 10 Minutes"
-API_TOKEN = "XXXXXXXXXXXXXXXXXXXXXXXXX"  
+API_TOKEN = "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"  
 DEVICE_CODES = {
     "standard": "SBEDSPHOXV2SN7212038",
-    "fluorometer": "TURNERCYCLOPS7F-900143"
+    "fluorometer": "Turner_Cyclops7F900143"
 }
 ROW_LIMIT = 10000
 OUTPUT_FORMAT = "array"
@@ -86,11 +86,12 @@ def fetch_data(time_range):
                 chlorophyll_data = chlorophyll_response.json()
                 if "sensorData" in chlorophyll_data and chlorophyll_data["sensorData"]:
                     data["chlorophyll"] = chlorophyll_data
-        except Exception:
-            pass
+        except Exception as e:
+            st.warning(f"Error fetching chlorophyll data: {str(e)}")
         
         return data
     else:
+        st.error(f"API Request Failed. Status: {response.status_code}")
         return None
 
 def process_api_data(data):
@@ -99,9 +100,7 @@ def process_api_data(data):
 
     try:
         processed_data = {}
-        time_values = None
-        
-        # List of expected sensors
+        time_values = None  
         expected_sensors = [
             "External pH (Dynamic Salinity)",
             "Oxygen Concentration Corrected",
@@ -160,12 +159,15 @@ def process_api_data(data):
                 df[sensor] = None
 
         return df
-    except Exception:
+    except Exception as e:
+        st.error(f"Error processing data: {e}")
         return pd.DataFrame()
 
-# Main Navigation
-st.sidebar.title("Navigation")
-page = st.sidebar.radio("Select Page", ["Ocean Data Dashboard", "Humpback Migration"])
+# Initialize or update data
+if "df" not in st.session_state:
+    with st.spinner("Fetching initial data..."):
+        api_data = fetch_data(DEFAULT_TIME_RANGE)
+        st.session_state.df = process_api_data(api_data)
 
 # Sidebar for user input
 st.sidebar.header("Filter Options")
@@ -175,50 +177,36 @@ time_range = st.sidebar.selectbox(
      "Past 1 Month", "Past 6 Months", "Past 1 Year", "All Available Data"]
 )
 
-if "df" not in st.session_state:
-    with st.spinner("Fetching initial data..."):
-        api_data = fetch_data(DEFAULT_TIME_RANGE)
-        st.session_state.df = process_api_data(api_data)
-
 if st.sidebar.button("Fetch Data"):
     with st.spinner("Fetching real-time data..."):
         api_data = fetch_data(time_range)
         st.session_state.df = process_api_data(api_data)
 
-df = st.session_state.df
+# Main Navigation in sidebar - Below the time range selector
+st.sidebar.markdown("---")  # Add a separator
+page = st.sidebar.radio("View", ["Humpback Migration", "Ocean Data Dashboard"])
 
-if page == "Ocean Data Dashboard":
+# Display the selected page
+if page == "Humpback Migration":
+    # Add an auto-scroll to top
+    st.markdown('<div id="top"></div>', unsafe_allow_html=True)
+    migration_page()
+else:
+    # Ocean Data Dashboard code
     st.title("🌊 Ocean Data Dashboard")
     st.write("This dashboard provides insights into ocean health using real-time sensor data.")
 
+    df = st.session_state.df
     if not df.empty:
-        # Ocean Acidification Trends
         st.subheader("📉 Ocean Acidification Trends")
         fig1 = px.line(df, x="Time (Atlantic)", y="External pH (Dynamic Salinity)", 
                       title="pH Level Over Time (Atlantic Time)")
-        st.plotly_chart(fig1, use_container_width=True)
+        st.plotly_chart(fig1)
 
-        # Hypoxia Risk Zones
         st.subheader("🌍 Hypoxia Risk Zones (Low Oxygen Levels)")
         fig2 = px.scatter(df, x="Time (Atlantic)", y="Oxygen Concentration Corrected", 
                          color="Oxygen Concentration Corrected",
                          title="Oxygen Concentration Over Time (Atlantic Time)")
-        st.plotly_chart(fig2, use_container_width=True)
-
-        # Chlorophyll Levels
-        if "Chlorophyll" in df.columns:
-            st.subheader("🌿 Chlorophyll Levels")
-            fig3 = px.line(df, x="Time (Atlantic)", y="Chlorophyll",
-                          title="Chlorophyll Concentration Over Time (Atlantic Time)")
-            st.plotly_chart(fig3, use_container_width=True)
-
-        # Temperature
-        st.subheader("🌡️ Temperature Over Time")
-        fig4 = px.line(df, x="Time (Atlantic)", y="Temperature", 
-                      title="Temperature Over Time (Atlantic Time)")
-        st.plotly_chart(fig4, use_container_width=True)
+        st.plotly_chart(fig2)
     else:
         st.write("No data available. Please fetch real-time data.")
-
-elif page == "Humpback Migration":
-    migration_page()

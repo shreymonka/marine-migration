@@ -173,22 +173,14 @@ time_range = st.sidebar.selectbox(
      "Past 1 Month", "Past 6 Months", "Past 1 Year", "All Available Data"]
 )
 
-# if st.sidebar.button("Fetch Data"):
-#     with st.spinner("Fetching real-time data..."):
-#         api_data = fetch_data(time_range)
-#         st.session_state.df = process_api_data(api_data)
-
 if st.sidebar.button("Fetch Data"):
     with st.spinner("Fetching real-time data..."):
         api_data = fetch_data(time_range)
         st.session_state.df = process_api_data(api_data)
-    st.experimental_rerun()
 
 
 st.sidebar.markdown("---")
-# page = st.sidebar.radio("View", ["Humpback Explorer", "Ocean Data Dashboard"])
-page = st.sidebar.radio("View", ["Humpback Explorer", "Ocean Data Dashboard"],
-                        index=["Humpback Explorer", "Ocean Data Dashboard"].index(st.session_state.active_tab))
+page = st.sidebar.radio("View", ["Humpback Explorer", "Ocean Data Dashboard"])
 
 st.session_state.active_tab = page
 

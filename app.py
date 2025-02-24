@@ -178,7 +178,7 @@ if st.sidebar.button("Fetch Data"):
 st.sidebar.markdown("---")
 page = st.sidebar.radio("View", ["Humpback Explorer", "Ocean Data Dashboard"])
 
-if page == "Humpback Migration":
+if page == "Humpback Explorer":
     st.markdown('<div id="top"></div>', unsafe_allow_html=True)
     migration_page()
 else:

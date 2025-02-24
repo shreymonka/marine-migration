@@ -19,7 +19,8 @@ def preprocess_data(df, factors):
     return df
 
 def create_conditions_chart(df, factors, title, colors):
-    """Create a simple and clean time-series graph showing environmental factors over time."""
+    """Create a simple and clean time-series graph showing environmental factors over time.
+       Graph generated using Plotly (https://plotly.com)."""
     fig = go.Figure()
     
     for factor in factors:
@@ -52,7 +53,13 @@ def feeding_conditions_page():
     if "df" in st.session_state and not st.session_state.df.empty:
         st.session_state.df = preprocess_data(st.session_state.df, FEEDING_FACTORS)
         
-        st.plotly_chart(create_conditions_chart(st.session_state.df, FEEDING_FACTORS, "🌊 Feeding Conditions Over Time", {"Chlorophyll": "#2ca02c", "External pH (Dynamic Salinity)": "#1f77b4", "Temperature": "#ff7f0e"}), use_container_width=True)
+        st.plotly_chart(create_conditions_chart(
+            st.session_state.df, 
+            FEEDING_FACTORS, 
+            "🌊 Feeding Conditions Over Time", 
+            {"Chlorophyll": "#2ca02c", "External pH (Dynamic Salinity)": "#1f77b4", "Temperature": "#ff7f0e"}
+        ), use_container_width=True)
+        st.caption("Graph generated using Plotly (https://plotly.com)")  # Citation for the graph
         
         st.subheader("🐳 How These Factors Affect Whale Feeding")
         st.markdown("""
@@ -84,7 +91,6 @@ def feeding_conditions_page():
         ### 🫧 Oxygen Concentration: The Ocean’s Breathing Room
         - Higher oxygen = **better conditions for prey species**.  
         - Whales thrive in **moderate oxygen zones**—too low and the prey disappears! 🏊‍♂️🐳
-        
         """)
     else:
         st.warning("No data available. Ensure the API has fetched data in app.py.")
@@ -99,7 +105,13 @@ def breeding_conditions_page():
     if "df" in st.session_state and not st.session_state.df.empty:
         st.session_state.df = preprocess_data(st.session_state.df, BREEDING_FACTORS)
         
-        st.plotly_chart(create_conditions_chart(st.session_state.df, BREEDING_FACTORS, "🌊 Breeding Conditions Over Time", {"Temperature": "#ff7f0e", "External pH (Dynamic Salinity)": "#1f77b4", "Oxygen Concentration Corrected": "#2ca02c"}), use_container_width=True)
+        st.plotly_chart(create_conditions_chart(
+            st.session_state.df, 
+            BREEDING_FACTORS, 
+            "🌊 Breeding Conditions Over Time", 
+            {"Temperature": "#ff7f0e", "External pH (Dynamic Salinity)": "#1f77b4", "Oxygen Concentration Corrected": "#2ca02c"}
+        ), use_container_width=True)
+        st.caption("Graph generated using Plotly (https://plotly.com)")  # Citation for the graph
         
         st.subheader("🐳 How These Factors Affect Whale Breeding")
         st.markdown("""
@@ -122,7 +134,7 @@ def breeding_conditions_page():
         - Warm waters **reduce energy loss** for newborn calves.
         - It minimizes **predator presence**, making it safer for young whales.
 
-        ### 🧐 How Does Ocean Salinity Play a Role?"
+        ### 🧐 How Does Ocean Salinity Play a Role?
         - Stable salinity helps newborns **float easily**, reducing energy spent on movement. 🍼🌊  
         - It prevents **dehydration** and ensures smooth **nursing** for calves. 🐳💙  
 
@@ -160,7 +172,8 @@ def safe_float_convert(value, default=0.0):
         return default
 
 def create_environmental_figure(df):
-    """Create a combined figure for all environmental parameters"""
+    """Create a combined figure for all environmental parameters.
+       Graph generated using Plotly (https://plotly.com)."""
     fig = go.Figure()
     
     fig.add_trace(go.Scatter(
@@ -259,7 +272,8 @@ def create_environmental_figure(df):
     return fig
 
 def create_simplified_species_chart():
-    """Create a simplified bar chart showing species presence by month"""
+    """Create a simplified bar chart showing species presence by month.
+       Graph generated using Plotly (https://plotly.com)."""
     months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
     current_month = datetime.now().month - 1
     
@@ -275,7 +289,7 @@ def create_simplified_species_chart():
     species_data = [
         ('🐋 Humpback Whales', [0, 0, 0, 0, 1, 2, 3, 3, 2, 1, 0, 0], 'Humpback'),
         ('🐟 Capelin', [0, 0, 0, 0, 1, 3, 3, 2, 1, 0, 0, 0], 'Capelin'),
-        ('🦐 Krill', [1, 1, 1, 2, 3, 3, 3, 3, 2, 1,1, 1], 'Krill'),
+        ('🦐 Krill', [1, 1, 1, 2, 3, 3, 3, 3, 2, 1, 1, 1], 'Krill'),
         ('🐠 Herring', [0, 0, 0, 0, 2, 1, 0, 2, 2, 1, 0, 0], 'Herring')
     ]
 
@@ -403,7 +417,6 @@ def show_species_info():
         
         *Data source: DFO Stock Assessment*
         """)
-
     with col2:
         st.success("""
         ### Krill 🦐
@@ -412,7 +425,6 @@ def show_species_info():
         
         *Data source: Memorial University*
         """)
-
     with col3:
         st.success("""
         ### Herring 🐠
@@ -425,8 +437,8 @@ def show_species_info():
 def show_whale_lifecycle():
     """Display the four phases of the humpback whale lifecycle with interactive details."""
     st.header("🐋 Humpback Whale Lifecycle")
-    st.markdown("Explore the interactive lifecycle phases of humpback whales. Click on each tab to view details, then use the buttons to learn even more about each phase.")
-
+    st.markdown("Explore the interactive lifecycle phases of humpback whales. Click on each tab to view details, then use the buttons to learn even more about each phase. (Citations: NOAA Fisheries; Meynecke et al., 2021)")
+    
     tabs = st.tabs(["Breeding Phase", "Feeding Phase", "Migration Phase", "Resting Phase"])
     
     with tabs[0]:
@@ -445,15 +457,15 @@ def show_whale_lifecycle():
             - Proximity to islands or reefs reduces energy expenditure for mother-calf pairs.  
             - Even slight changes in water temperature or sea state can impact calf survival.
             """)
-
+    
     with tabs[1]:
         st.subheader("2️⃣ Feeding Phase")
         st.markdown("""
         **Habitat:** Colder, high-latitude waters where nutrient-rich upwelling zones create abundant prey concentrations.  
         **Temperature:** Cooler waters, often in the 10–15°C range, support high densities of krill and small fish.  
         **Behavior:** Whales utilize specialized feeding techniques like lunge feeding and bubble-net feeding.  
-        **Key Drivers:** Strong thermal gradients, ocean current patterns, and high chlorophyll levels (a proxy for prey availability) are crucial.
-        **Reference:** Research reviews (e.g., Meynecke et al.) detail these environmental drivers.
+        **Key Drivers:** Strong thermal gradients, ocean current patterns, and high chlorophyll levels (a proxy for prey availability) are crucial.  
+        **Reference:** Research reviews (e.g., Meynecke et al., 2021) detail these environmental drivers.
         """)
         if st.button("Learn more about Feeding", key="feeding"):
             st.info("""
@@ -462,14 +474,14 @@ def show_whale_lifecycle():
             - Shifts in water temperature due to climate change may affect prey distribution and feeding efficiency.  
             - Whales often adjust their feeding behavior to take advantage of these dynamic conditions.
             """)
-
+    
     with tabs[2]:
         st.subheader("3️⃣ Migration Phase")
         st.markdown("""
         **Habitat:** Long-distance travel routes connecting cold feeding grounds with warm breeding areas.  
         **Distance & Speed:** Migrations can span thousands of kilometers; typical speeds range from 2–5 km/h, with mother-calf pairs moving more slowly.  
         **Behavior:** Whales follow predictable migratory corridors influenced by ocean currents and seasonal temperature changes.  
-        **Key Drivers:** Variations in water temperature, current direction, and the need to optimize energy use shape migratory paths.
+        **Key Drivers:** Variations in water temperature, current direction, and the need to optimize energy use shape migratory paths.  
         **Reference:** NOAA Fisheries and scientific studies ([NOAA Fisheries](https://www.fisheries.noaa.gov/species/humpback-whale)) provide detailed migratory maps.
         """)
         if st.button("Learn more about Migration", key="migration"):
@@ -479,14 +491,14 @@ def show_whale_lifecycle():
             - Whales may adjust their timing and pathways in response to subtle environmental shifts.  
             - Efficient migration is critical for ensuring that whales reach productive feeding or safe breeding grounds.
             """)
-
+    
     with tabs[3]:
         st.subheader("4️⃣ Resting Phase")
         st.markdown("""
         **Habitat:** Calm, shallow, and sheltered waters—often in bays or semi-enclosed coastal areas—that facilitate energy conservation.  
         **Behavior:** During migration, whales, particularly mother-calf pairs, pause for extended surface intervals to reduce energy expenditure.  
-        **Key Drivers:** Low wave action, gentle bathymetry, and close proximity to the coast help establish ideal resting areas.
-        **Reference:** Reviews (e.g., Meynecke et al.) emphasize the importance of these areas for whale recovery.
+        **Key Drivers:** Low wave action, gentle bathymetry, and close proximity to the coast help establish ideal resting areas.  
+        **Reference:** Reviews (e.g., Meynecke et al., 2021) emphasize the importance of these areas for whale recovery.
         """)
         if st.button("Learn more about Resting", key="resting"):
             st.info("""
@@ -504,18 +516,19 @@ def migration_page():
     This dashboard provides insights into humpback whale migration patterns and environmental conditions 
     in Holyrood waters. The data combines real-time measurements with historical migration patterns.
     """)
-
+    
     df = st.session_state.df if "df" in st.session_state else pd.DataFrame()
-
+    
     if not df.empty:
-        tab1, tab2, tab3, tab4, tab5 = st.tabs([
+        tab1, tab2, tab3, tab4, tab5, tab6 = st.tabs([
             "ℹ️ About",
             "🌊 Phases",
             "📊 Feeding Conditions",
             "🗓️ Migration Patterns",
-            "🐟 Breeding Conditions"
+            "🐟 Breeding Conditions",
+            "📚 Data Sources"
         ])
-
+    
         with tab1:
             st.header("About Humpback Whales")
             
@@ -524,7 +537,7 @@ def migration_page():
             with col1:
                 st.image(
                     IMAGE_PATH,
-                    caption="Humpback Whale",
+                    caption="Humpback Whale (Image source: NOAA Fisheries - https://www.fisheries.noaa.gov/species/humpback-whale)",
                     use_container_width=True
                 )
             
@@ -571,29 +584,30 @@ def migration_page():
         
         with tab2:
             show_whale_lifecycle()
-
+    
         with tab3:
             feeding_conditions_page()
-
+    
         with tab4:
             st.plotly_chart(create_simplified_species_chart(), use_container_width=True)
+            st.caption("Graph generated using Plotly (https://plotly.com)")  # Citation for the graph
             
             col1, col2 = st.columns(2)
             with col1:
                 st.markdown("""
                 ### Presence Level Guide
-                - **0**: Absent
-                - **1**: Low Presence
-                - **2**: Medium Presence
-                - **3**: High Presence
+                - **0:** Absent
+                - **1:** Low Presence
+                - **2:** Medium Presence
+                - **3:** High Presence
                 """)
             with col2:
                 st.markdown("""
                 ### Peak Activity Periods
-                - 🐋 **Whales**: June - August
-                - 🐟 **Capelin**: June - July
-                - 🦐 **Krill**: April - September
-                - 🐠 **Herring**: May & August - September
+                - 🐋 **Whales:** June - August
+                - 🐟 **Capelin:** June - July
+                - 🦐 **Krill:** April - September
+                - 🐠 **Herring:** May & August - September
                 """)
             
             st.info("""
@@ -602,21 +616,32 @@ def migration_page():
             - 🐟 Prey availability affects whale presence
             - 🌡️ Seasonal changes impact all species
             """)
-
+    
         with tab5:
             breeding_conditions_page()
+    
+        with tab6:
+            st.header("📚 Data Sources")
+            st.markdown("""
+            ### Useful References
+            - **Ocean Networks Canada – API Source:**  
+              Main API source for real-time sensor data.  
+              [Ocean Networks Canada Data](https://data.oceannetworks.ca/DataPreview?TREETYPE=1&LOCATION=11&TIMECONFIG=0)
+              
+            - **NOAA Fisheries – Humpback Whale:**  
+              Detailed species information including habitat, behavior, and conservation efforts.  
+              [NOAA Fisheries - Humpback Whale](https://www.fisheries.noaa.gov/species/humpback-whale)
+              
+            - **Newfoundland Labrador Whale Watching:**  
+              A comprehensive guide to whale watching opportunities and information on local migration patterns.  
+              [Whale Watching Newfoundland Labrador](https://www.newfoundlandlabrador.com/things-to-do/whale-watching)
+              
+            - **Scientific Review:**  
+              Meynecke, J-O., et al. (2021). *The Role of Environmental Drivers in Humpback Whale Distribution, Movement and Behavior: A Review*. Frontiers in Marine Science.  
+              DOI: [10.3389/fmars.2021.720774](https://doi.org/10.3389/fmars.2021.720774)
+            """)
     else:
         st.warning("No data available. Please fetch real-time data using the sidebar controls.")
-
-    st.markdown("""
-    ---
-    ### Data Sources
-    - 📊 Real-time sensor data from Ocean Networks Canada  
-    - 🔬 Migration patterns from DFO Canada  
-    - 🎓 Species data from Memorial University Research
-    
-    *Note: Migration patterns are general guidelines and may vary based on local conditions.*
-    """)
 
 if __name__ == "__main__":
     migration_page()

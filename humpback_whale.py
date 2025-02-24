@@ -550,9 +550,9 @@ def migration_page():
                 
                 st.markdown("""
                 ### Key Characteristics
-                - 🏷 **Size:** Adults range from 12-16 meters in length  
-                - ⚖ **Weight:** Can weigh up to 30,000 kg  
-                - ⌛ **Lifespan:** Typically 45-50 years  
+                - 🏷 **Size:** Adults range Up to about 60 feet 
+                - ⚖ **Weight:** Can up to about 40 tons  
+                - ⌛ **Lifespan:** About 80 to 90 years  
                 - 🍽 **Diet:** Primarily krill and small fish, with specialized feeding techniques such as bubble-net feeding  
                 """)
                 

@@ -308,28 +308,79 @@ def show_species_info():
         """)
 
 def show_whale_lifecycle():
-    """Display the four phases of the humpback whale lifecycle"""
+    """Display the four phases of the humpback whale lifecycle with interactive details."""
     st.header("🐋 Humpback Whale Lifecycle")
-    st.markdown("""
-    Humpback whales experience four key lifecycle phases, each influenced by environmental conditions:
-    
-    ### 1️⃣ Breeding Phase 🧬
-    - Occurs in warm tropical waters during winter.
-    - Whales mate and give birth, influenced by **temperature, salinity, and ocean currents**.
-    
-    ### 2️⃣ Feeding Phase 🍽️
-    - Takes place in cold high-latitude waters where whales consume krill and fish.
-    - Impacted by **oxygen levels, chlorophyll concentration (prey availability), and water temperature**.
-    
-    ### 3️⃣ Migration Phase 🏊‍♂️
-    - Whales travel between feeding and breeding grounds.
-    - Affected by **ocean currents, salinity changes, and prey distribution**.
-    
-    ### 4️⃣ Resting Phase 😴
-    - Occurs in sheltered coastal areas, essential for energy conservation.
-    - Impacted by **water movement, temperature, and environmental stability**.
-    """)
+    st.markdown("Explore the interactive lifecycle phases of humpback whales. Click on each tab to view details, then use the buttons to learn even more about each phase.")
 
+    # Create tabs for each lifecycle phase
+    tabs = st.tabs(["Breeding Phase", "Feeding Phase", "Migration Phase", "Resting Phase"])
+    
+    with tabs[0]:
+        st.subheader("1️⃣ Breeding Phase")
+        st.markdown("""
+        **Habitat:** Warm, shallow (<50 m) coastal or island waters offering calm conditions.  
+        **Temperature:** Typically between 19°C and 28°C – ideal for calving and nurturing young.  
+        **Behavior:** Involves mating, calving, and early calf-rearing in sheltered environments.  
+        **Key Drivers:** Shallow bathymetry, proximity to coastlines or reefs, and low sea state protect vulnerable calves.  
+        **Reference:** NOAA Fisheries provides detailed descriptions of these breeding habitats ([NOAA Fisheries](https://www.fisheries.noaa.gov/species/humpback-whale)).
+        """)
+        if st.button("Learn more about Breeding", key="breeding"):
+            st.info("""
+            Additional Details:  
+            - Breeding areas are chosen for their ability to provide natural protection from predators and rough weather.  
+            - Proximity to islands or reefs reduces energy expenditure for mother-calf pairs.  
+            - Even slight changes in water temperature or sea state can impact calf survival.
+            """)
+
+    with tabs[1]:
+        st.subheader("2️⃣ Feeding Phase")
+        st.markdown("""
+        **Habitat:** Colder, high-latitude waters where nutrient-rich upwelling zones create abundant prey concentrations.  
+        **Temperature:** Cooler waters, often in the 10–15°C range, support high densities of krill and small fish.  
+        **Behavior:** Whales utilize specialized feeding techniques like lunge feeding and bubble-net feeding.  
+        **Key Drivers:** Strong thermal gradients, ocean current patterns, and high chlorophyll levels (a proxy for prey availability) are crucial.
+        **Reference:** Research reviews (e.g., Meynecke et al.) detail these environmental drivers.
+        """)
+        if st.button("Learn more about Feeding", key="feeding"):
+            st.info("""
+            Additional Details:  
+            - Upwelling zones and ocean fronts concentrate prey, forming 'hotspots' for feeding.  
+            - Shifts in water temperature due to climate change may affect prey distribution and feeding efficiency.  
+            - Whales often adjust their feeding behavior to take advantage of these dynamic conditions.
+            """)
+
+    with tabs[2]:
+        st.subheader("3️⃣ Migration Phase")
+        st.markdown("""
+        **Habitat:** Long-distance travel routes connecting cold feeding grounds with warm breeding areas.  
+        **Distance & Speed:** Migrations can span thousands of kilometers; typical speeds range from 2–5 km/h, with mother-calf pairs moving more slowly.  
+        **Behavior:** Whales follow predictable migratory corridors influenced by ocean currents and seasonal temperature changes.  
+        **Key Drivers:** Variations in water temperature, current direction, and the need to optimize energy use shape migratory paths.
+        **Reference:** NOAA Fisheries and scientific studies ([NOAA Fisheries](https://www.fisheries.noaa.gov/species/humpback-whale)) provide detailed migratory maps.
+        """)
+        if st.button("Learn more about Migration", key="migration"):
+            st.info("""
+            Additional Details:  
+            - Migratory routes are often influenced by natural landmarks such as seamounts and continental shelves.  
+            - Whales may adjust their timing and pathways in response to subtle environmental shifts.  
+            - Efficient migration is critical for ensuring that whales reach productive feeding or safe breeding grounds.
+            """)
+
+    with tabs[3]:
+        st.subheader("4️⃣ Resting Phase")
+        st.markdown("""
+        **Habitat:** Calm, shallow, and sheltered waters—often in bays or semi-enclosed coastal areas—that facilitate energy conservation.  
+        **Behavior:** During migration, whales, particularly mother-calf pairs, pause for extended surface intervals to reduce energy expenditure.  
+        **Key Drivers:** Low wave action, gentle bathymetry, and close proximity to the coast help establish ideal resting areas.
+        **Reference:** Reviews (e.g., Meynecke et al.) emphasize the importance of these areas for whale recovery.
+        """)
+        if st.button("Learn more about Resting", key="resting"):
+            st.info("""
+            Additional Details:  
+            - Resting areas are vital for conserving energy after long migrations.  
+            - These zones are highly sensitive to disturbances such as boat traffic and ocean noise.  
+            - Protecting these habitats is an emerging focus of conservation efforts.
+            """)
 
 def migration_page():
     """Main migration page"""
@@ -354,62 +405,63 @@ def migration_page():
         with tab1:
             st.header("About Humpback Whales")
             
-            col1, col2 = st.columns([4, 6])
+            # Use two columns: left for the image, right for species overview
+            col1, col2 = st.columns(2)
             
             with col1:
-                st.image(IMAGE_PATH,
-                        caption="Humpback Whale",
-                        use_container_width=True)
-
+                st.image(
+                    IMAGE_PATH,
+                    caption="Humpback Whale",
+                    use_container_width=True
+                )
+            
             with col2:
                 st.markdown("""
                 ### Species Overview
-                Humpback whales (*Megaptera novaeangliae*) are one of the largest marine mammals in our oceans. 
-                These magnificent creatures are known for their distinctive behaviors, complex songs, and annual migrations.
-
-                ### Key Characteristics
-                - **Size**: Adults range from 12-16 meters long
-                - **Weight**: Can weigh up to 30,000 kg
-                - **Lifespan**: Average 45-50 years
-                - **Diet**: Primarily krill and small fish
+                Humpback whales (*Megaptera novaeangliae*) are among the most majestic marine mammals. 
+                Renowned for their haunting songs and acrobatic breaches, these giants of the ocean captivate audiences worldwide.
                 """)
-
-            st.markdown("""
-            <div style='margin-top: -10px;'>
+                
+                st.markdown("""
+                ### Key Characteristics
+                - 🏷 **Size:** Adults range from 12-16 meters in length  
+                - ⚖ **Weight:** Can weigh up to 30,000 kg  
+                - ⌛ **Lifespan:** Typically 45-50 years  
+                - 🍽 **Diet:** Primarily krill and small fish, with specialized feeding techniques such as bubble-net feeding  
+                """)
+                
+                with st.expander("🤔 Did you know?"):
+                    st.markdown("""
+                    - 🎶 **Remarkable Songs:** Male humpbacks sing complex, evolving songs that can last 20 minutes or more.
+                    - 🌏 **Epic Migrations:** They travel up to 8,000 kilometers annually between feeding and breeding grounds.
+                    - 🦸 **Unique Physiology:** Their long pectoral fins, up to 5 meters, are the longest of any whale species relative to body size.
+                    - 🤝 **Social Behavior:** Humpbacks often cooperate in hunting, showcasing advanced group coordination.
+                    """)
             
+            st.markdown("""
             ### Behavior & Migration
-            Humpback whales undertake one of the longest migrations of any mammal. They travel from cold feeding 
-            grounds near the poles to warm breeding waters near the equator. During migration, they can travel 
-            up to 8,000 kilometers each way.
-
+            Humpback whales undertake one of the longest migrations of any mammal, traveling between cold, nutrient-rich feeding grounds near the poles and warmer tropical breeding areas. This journey, spanning thousands of kilometers, is essential for their reproduction and population health.
+            
             ### Conservation Status
-            After being heavily impacted by commercial whaling, humpback whale populations have shown remarkable 
-            recovery since the international whaling moratorium. However, they still face various threats including:
-            - Ship strikes
-            - Entanglement in fishing gear
-            - Climate change impacts
-            - Ocean noise pollution
+            Although humpback whale populations have rebounded significantly following a moratorium on commercial whaling, they continue to face various threats:
+            - 🚢 Ship strikes  
+            - 🏷 Entanglement in fishing gear  
+            - ♨️ Climate change impacts  
+            - 🔊 Ocean noise pollution
             
             ### Unique Features
-            Humpback whales are known for several distinctive characteristics:
-            1. **Pectoral Fins**: Their long pectoral fins (up to 5 meters) are proportionally the longest of any whale
-            2. **Breaching**: They regularly leap out of the water, creating spectacular displays
-            3. **Whale Songs**: Males produce complex songs that can last for hours and change over time
-            4. **Bubble-net Feeding**: A sophisticated hunting technique where groups create bubble nets to trap fish
-            </div>
+            1. **Pectoral Fins:** Exceptionally long, aiding in maneuverability  
+            2. **Breaching:** Dramatic leaps out of the water  
+            3. **Whale Songs:** Complex vocalizations that can evolve over time  
+            4. **Bubble-net Feeding:** A group feeding strategy to corral fish
             """, unsafe_allow_html=True)
         
         with tab2:
             show_whale_lifecycle()
 
         with tab3:
-            # Show environmental metrics at the top
             show_metrics(df)
-            
-            # Combined environmental parameters plot
             st.plotly_chart(create_environmental_figure(df), use_container_width=True)
-            
-            # Show condition alerts
             show_condition_alerts(df)
 
         with tab4:
@@ -419,24 +471,24 @@ def migration_page():
             with col1:
                 st.markdown("""
                 ### Presence Level Guide
-                - **0**: Absent
-                - **1**: Low Presence
-                - **2**: Medium Presence
-                - **3**: High Presence
+                - **0:** Absent
+                - **1:** Low Presence
+                - **2:** Medium Presence
+                - **3:** High Presence
                 """)
             with col2:
                 st.markdown("""
                 ### Peak Activity Periods
-                - 🐋 **Whales**: June - August
-                - 🐟 **Capelin**: June - July
-                - 🦐 **Krill**: April - September
-                - 🐠 **Herring**: May & August - September
+                - 🐋 **Whales:** June - August
+                - 🐟 **Capelin:** June - July
+                - 🦐 **Krill:** April - September
+                - 🐠 **Herring:** May & August - September
                 """)
             
             st.info("""
             ### Environmental Influences on Migration
-            - 🌊 Water temperature triggers movement patterns
-            - 🐟 Prey availability affects whale presence
+            - 🌊 Water temperature triggers movement patterns  
+            - 🐟 Prey availability affects whale presence  
             - 🌡️ Seasonal changes impact all species
             """)
 
@@ -446,19 +498,18 @@ def migration_page():
             
             st.info("""
             ### Environmental Factors Affecting Migration
-            - 🌊 Water temperature influences capelin spawning timing
-            - 🌡️ Krill distribution varies with water column stratification
+            - 🌊 Water temperature influences capelin spawning timing  
+            - 🌡️ Krill distribution varies with water column stratification  
             - 🐋 Humpback arrival typically correlates with capelin presence
             """)
-
     else:
         st.warning("No data available. Please fetch real-time data using the sidebar controls.")
 
     st.markdown("""
     ---
     ### Data Sources
-    - 📊 Real-time sensor data from Ocean Networks Canada
-    - 🔬 Migration patterns from DFO Canada
+    - 📊 Real-time sensor data from Ocean Networks Canada  
+    - 🔬 Migration patterns from DFO Canada  
     - 🎓 Species data from Memorial University Research
     
     *Note: Migration patterns are general guidelines and may vary based on local conditions.*

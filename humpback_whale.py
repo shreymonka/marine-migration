@@ -544,7 +544,7 @@ def migration_page():
             with col2:
                 st.markdown("""
                 ### Species Overview
-                Humpback whales (*Megaptera novaeangliae*) are among the most majestic marine mammals. 
+                Humpback whales, Megaptera novaeangliae, are a highly migratory species exposed to a wide range of environmental factors during their lifetime.  
                 Renowned for their haunting songs and acrobatic breaches, these giants of the ocean captivate audiences worldwide.
                 """)
                 

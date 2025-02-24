@@ -7,7 +7,7 @@ import pytz
 from humpback_whale import migration_page
 
 # ✅ Streamlit Page Configuration
-st.set_page_config(page_title="Humpback Migration Dashboard", layout="wide")
+st.set_page_config(page_title="Whale Watch", layout="wide")
 
 # API Configuration
 API_URL = "https://data.oceannetworks.ca/api/scalardata/device"
@@ -176,7 +176,7 @@ if st.sidebar.button("Fetch Data"):
         st.session_state.df = process_api_data(api_data)
 
 st.sidebar.markdown("---")
-page = st.sidebar.radio("View", ["Humpback Migration", "Ocean Data Dashboard"])
+page = st.sidebar.radio("View", ["Humpback Explorer", "Ocean Data Dashboard"])
 
 if page == "Humpback Migration":
     st.markdown('<div id="top"></div>', unsafe_allow_html=True)

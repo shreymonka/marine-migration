@@ -628,6 +628,20 @@ def migration_page():
               Main API source for real-time sensor data.  
               [Ocean Networks Canada Data](https://data.oceannetworks.ca/DataPreview?TREETYPE=1&LOCATION=11&TIMECONFIG=0)
               
+            - **ONC - Sea-Bird Deep SeapHOx V2 SN 721-2038:**
+              
+              API source for Integrated CTD pH O2 Instrument.
+              
+              Citation: Marine Institute of Memorial University. 2022. Conception Bay Integrated CTD pH O2 Instrument Deployed 2022-08-21. Ocean Networks Canada Society. https://doi.org/10.34943/ac118b10-0718-401d-ac27-ca7e7791f458.
+              DOI: [10.34943/ac118b10-0718-401d-ac27-ca7e7791f458]
+              
+            - **ONC - Turner Cyclops-7F Fluorometer (S/N 900143) :**
+              
+              API source for Fluorometer.
+              
+              Citation: Marine Institute of Memorial University. 2021. Conception Bay Fluorometer Deployed 2021-02-14. Ocean Networks Canada Society. https://doi.org/10.34943/4cd438cb-64b3-4f3d-ae91-af54a259c145.
+              DOI: [10.34943/4cd438cb-64b3-4f3d-ae91-af54a259c145]
+              
             - **NOAA Fisheries – Humpback Whale:**  
               Detailed species information including habitat, behavior, and conservation efforts.  
               [NOAA Fisheries - Humpback Whale](https://www.fisheries.noaa.gov/species/humpback-whale)

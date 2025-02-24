@@ -307,9 +307,33 @@ def show_species_info():
         *Data source: DFO Atlantic Herring*
         """)
 
+def show_whale_lifecycle():
+    """Display the four phases of the humpback whale lifecycle"""
+    st.header("🐋 Humpback Whale Lifecycle")
+    st.markdown("""
+    Humpback whales experience four key lifecycle phases, each influenced by environmental conditions:
+    
+    ### 1️⃣ Breeding Phase 🧬
+    - Occurs in warm tropical waters during winter.
+    - Whales mate and give birth, influenced by **temperature, salinity, and ocean currents**.
+    
+    ### 2️⃣ Feeding Phase 🍽️
+    - Takes place in cold high-latitude waters where whales consume krill and fish.
+    - Impacted by **oxygen levels, chlorophyll concentration (prey availability), and water temperature**.
+    
+    ### 3️⃣ Migration Phase 🏊‍♂️
+    - Whales travel between feeding and breeding grounds.
+    - Affected by **ocean currents, salinity changes, and prey distribution**.
+    
+    ### 4️⃣ Resting Phase 😴
+    - Occurs in sheltered coastal areas, essential for energy conservation.
+    - Impacted by **water movement, temperature, and environmental stability**.
+    """)
+
+
 def migration_page():
     """Main migration page"""
-    st.title("🐋 Humpback Whale Migration Dashboard")
+    st.title("🐋 Whale Watch")
     
     st.info("""
     This dashboard provides insights into humpback whale migration patterns and environmental conditions 
@@ -319,8 +343,9 @@ def migration_page():
     df = st.session_state.df if "df" in st.session_state else pd.DataFrame()
 
     if not df.empty:
-        tab1, tab2, tab3, tab4 = st.tabs([
+        tab1, tab2, tab3, tab4, tab5 = st.tabs([
             "ℹ️ About",
+            "🌊 Phases",
             "📊 Environmental Conditions",
             "🗓️ Migration Patterns",
             "🐟 Prey Species"
@@ -333,7 +358,7 @@ def migration_page():
             
             with col1:
                 st.image(IMAGE_PATH,
-                        caption="Humpback Whale Breaching",
+                        caption="Humpback Whale",
                         use_container_width=True)
 
             with col2:
@@ -373,8 +398,11 @@ def migration_page():
             4. **Bubble-net Feeding**: A sophisticated hunting technique where groups create bubble nets to trap fish
             </div>
             """, unsafe_allow_html=True)
-
+        
         with tab2:
+            show_whale_lifecycle()
+
+        with tab3:
             # Show environmental metrics at the top
             show_metrics(df)
             
@@ -384,7 +412,7 @@ def migration_page():
             # Show condition alerts
             show_condition_alerts(df)
 
-        with tab3:
+        with tab4:
             st.plotly_chart(create_simplified_species_chart(), use_container_width=True)
             
             col1, col2 = st.columns(2)
@@ -412,7 +440,7 @@ def migration_page():
             - 🌡️ Seasonal changes impact all species
             """)
 
-        with tab4:
+        with tab5:
             st.subheader("Key Prey Species in Holyrood Waters")
             show_species_info()
             

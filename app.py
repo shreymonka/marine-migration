@@ -12,10 +12,10 @@ st.set_page_config(page_title="Humpback Migration Dashboard", layout="wide")
 # API Configuration
 API_URL = "https://data.oceannetworks.ca/api/scalardata/device"
 DEFAULT_TIME_RANGE = "Past 10 Minutes"
-API_TOKEN = "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"  
+API_TOKEN = "492d6df3-c559-4e2b-8da0-1263e326ae1f"  
 DEVICE_CODES = {
     "standard": "SBEDSPHOXV2SN7212038",
-    "fluorometer": "Turner_Cyclops7F900143"
+    "fluorometer": "TURNERCYCLOPS7F-900143"
 }
 ROW_LIMIT = 10000
 OUTPUT_FORMAT = "array"

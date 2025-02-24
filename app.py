@@ -8,6 +8,10 @@ from humpback_whale import migration_page
 
 st.set_page_config(page_title="Whale Watch", layout="wide")
 
+if "active_tab" not in st.session_state:
+    st.session_state.active_tab = "Humpback Explorer"
+
+
 # API Configuration
 API_URL = "https://data.oceannetworks.ca/api/scalardata/device"
 DEFAULT_TIME_RANGE = "Past 10 Minutes"
@@ -169,13 +173,24 @@ time_range = st.sidebar.selectbox(
      "Past 1 Month", "Past 6 Months", "Past 1 Year", "All Available Data"]
 )
 
+# if st.sidebar.button("Fetch Data"):
+#     with st.spinner("Fetching real-time data..."):
+#         api_data = fetch_data(time_range)
+#         st.session_state.df = process_api_data(api_data)
+
 if st.sidebar.button("Fetch Data"):
     with st.spinner("Fetching real-time data..."):
         api_data = fetch_data(time_range)
         st.session_state.df = process_api_data(api_data)
+    st.experimental_rerun()
+
 
 st.sidebar.markdown("---")
-page = st.sidebar.radio("View", ["Humpback Explorer", "Ocean Data Dashboard"])
+# page = st.sidebar.radio("View", ["Humpback Explorer", "Ocean Data Dashboard"])
+page = st.sidebar.radio("View", ["Humpback Explorer", "Ocean Data Dashboard"],
+                        index=["Humpback Explorer", "Ocean Data Dashboard"].index(st.session_state.active_tab))
+
+st.session_state.active_tab = page
 
 if page == "Humpback Explorer":
     st.markdown('<div id="top"></div>', unsafe_allow_html=True)

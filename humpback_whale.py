@@ -520,14 +520,29 @@ def migration_page():
     df = st.session_state.df if "df" in st.session_state else pd.DataFrame()
     
     if not df.empty:
-        tab1, tab2, tab3, tab4, tab5, tab6 = st.tabs([
-            "ℹ️ About",
-            "🌊 Phases",
-            "📊 Feeding Conditions",
-            "🗓️ Migration Patterns",
-            "🐟 Breeding Conditions",
-            "📚 Data Sources"
-        ])
+        # tab1, tab2, tab3, tab4, tab5, tab6 = st.tabs([
+        #     "ℹ️ About",
+        #     "🌊 Phases",
+        #     "📊 Feeding Conditions",
+        #     "🗓️ Migration Patterns",
+        #     "🐟 Breeding Conditions",
+        #     "📚 Data Sources"
+        # ])
+        tab_options = ["ℹ️ About", "🌊 Phases", "📊 Feeding Conditions", "🗓️ Migration Patterns", "🐟 Breeding Conditions",
+                       "📚 Data Sources"]
+
+        if "selected_tab" not in st.session_state:
+            st.session_state.selected_tab = "ℹ️ About"
+
+        selected_tab = st.session_state.selected_tab
+
+        tabs = st.tabs(tab_options)
+
+        tab_dict = {tab_name: tabs[i] for i, tab_name in enumerate(tab_options)}
+
+        for tab_name, tab in tab_dict.items():
+            if tab:
+                st.session_state.selected_tab = tab_name
     
         with tab1:
             st.header("About Humpback Whales")

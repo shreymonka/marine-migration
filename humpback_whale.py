@@ -531,18 +531,33 @@ def migration_page():
         tab_options = ["ℹ️ About", "🌊 Phases", "📊 Feeding Conditions", "🗓️ Migration Patterns", "🐟 Breeding Conditions",
                        "📚 Data Sources"]
 
+        # Store active tab in session state
         if "selected_tab" not in st.session_state:
-            st.session_state.selected_tab = "ℹ️ About"
+            st.session_state.selected_tab = tab_options[0]  # Default to first tab
 
-        selected_tab = st.session_state.selected_tab
+        # Create tab selection using radio buttons to persist tab state
+        st.session_state.selected_tab = st.radio("Select Tab", tab_options,
+                                                 index=tab_options.index(st.session_state.selected_tab))
 
-        tabs = st.tabs(tab_options)
+        # Display content based on selected tab
+        if st.session_state.selected_tab == "ℹ️ About":
+            st.header("About Humpback Whales")
+            # Content for About tab...
 
-        tab_dict = {tab_name: tabs[i] for i, tab_name in enumerate(tab_options)}
+        elif st.session_state.selected_tab == "🌊 Phases":
+            show_whale_lifecycle()
 
-        for tab_name, tab in tab_dict.items():
-            if tab:
-                st.session_state.selected_tab = tab_name
+        elif st.session_state.selected_tab == "📊 Feeding Conditions":
+            feeding_conditions_page()
+
+        elif st.session_state.selected_tab == "🗓️ Migration Patterns":
+            st.plotly_chart(create_simplified_species_chart(), use_container_width=True)
+
+        elif st.session_state.selected_tab == "🐟 Breeding Conditions":
+            breeding_conditions_page()
+
+        elif st.session_state.selected_tab == "📚 Data Sources":
+            st.header("📚 Data Sources")
     
         with tab1:
             st.header("About Humpback Whales")

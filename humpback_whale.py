@@ -511,118 +511,129 @@ def show_whale_lifecycle():
 def migration_page():
     """Main migration page"""
     st.title("🐋 Whale Watch")
-    
+
     st.info("""
     This dashboard provides insights into humpback whale migration patterns and environmental conditions 
     in Holyrood waters. The data combines real-time measurements with historical migration patterns.
     """)
-    
+
     df = st.session_state.df if "df" in st.session_state else pd.DataFrame()
-    
-    if not df.empty:
-        tab1, tab2, tab3, tab4, tab5, tab6 = st.tabs([
-            "ℹ️ About",
-            "🌊 Phases",
-            "📊 Feeding Conditions",
-            "🗓️ Migration Patterns",
-            "🐟 Breeding Conditions",
-            "📚 Data Sources"
-        ])
-    
-        with tab1:
-            st.header("About Humpback Whales")
-            
-            col1, col2 = st.columns(2)
-            
-            with col1:
+
+    # ✅ Ensure session state stores the last selected tab
+    if "selected_tab" not in st.session_state:
+        st.session_state.selected_tab = "ℹ️ About"
+
+    tab_options = [
+        "ℹ️ About",
+        "🌊 Phases",
+        "📊 Feeding Conditions",
+        "🗓️ Migration Patterns",
+        "🐟 Breeding Conditions",
+        "📚 Data Sources"
+    ]
+
+    # 🛠 Select the correct tab based on session state
+    selected_tab = st.radio("Select a section:", tab_options, index=tab_options.index(st.session_state.selected_tab))
+
+    # 🚀 Update session state when tab changes
+    if selected_tab != st.session_state.selected_tab:
+        st.session_state.selected_tab = selected_tab
+        st.rerun()  # Forces Streamlit to rerun while keeping the tab state
+
+    # ✅ Now display the correct content for the selected tab
+    if selected_tab == "ℹ️ About":
+        st.header("About Humpback Whales")
+
+        col1, col2 = st.columns(2)
+        with col1:
                 st.image(
                     IMAGE_PATH,
                     caption="Humpback Whale (Image source: NOAA Fisheries - https://www.fisheries.noaa.gov/species/humpback-whale)",
                     use_container_width=True
                 )
             
-            with col2:
-                st.markdown("""
-                ### Species Overview
-                Humpback whales, Megaptera novaeangliae, are a highly migratory species exposed to a wide range of environmental factors during their lifetime.  
-                Renowned for their haunting songs and acrobatic breaches, these giants of the ocean captivate audiences worldwide.
-                """)
-                
-                st.markdown("""
-                ### Key Characteristics
-                - 🏷 **Size:** Adults range Up to about 60 feet 
-                - ⚖ **Weight:** Can up to about 40 tons  
-                - ⌛ **Lifespan:** About 80 to 90 years  
-                - 🍽 **Diet:** Primarily krill and small fish, with specialized feeding techniques such as bubble-net feeding  
-                """)
-                
-                with st.expander("🤔 Did you know?"):
-                    st.markdown("""
-                    - 🎶 **Remarkable Songs:** Male humpbacks sing complex, evolving songs that can last 20 minutes or more.
-                    - 🌏 **Epic Migrations:** They travel up to 8,000 kilometers annually between feeding and breeding grounds.
-                    - 🦸 **Unique Physiology:** Their long pectoral fins, up to 5 meters, are the longest of any whale species relative to body size.
-                    - 🤝 **Social Behavior:** Humpbacks often cooperate in hunting, showcasing advanced group coordination.
-                    """)
-            
+        with col2:
             st.markdown("""
-            ### Behavior & Migration
-            Humpback whales undertake one of the longest migrations of any mammal, traveling between cold, nutrient-rich feeding grounds near the poles and warmer tropical breeding areas. This journey, spanning thousands of kilometers, is essential for their reproduction and population health.
-            
-            ### Conservation Status
-            Although humpback whale populations have rebounded significantly following a moratorium on commercial whaling, they continue to face various threats:
-            - 🚢 Ship strikes  
-            - 🏷 Entanglement in fishing gear  
-            - ♨️ Climate change impacts  
-            - 🔊 Ocean noise pollution
-            
-            ### Unique Features
-            1. **Pectoral Fins:** Exceptionally long, aiding in maneuverability  
-            2. **Breaching:** Dramatic leaps out of the water  
-            3. **Whale Songs:** Complex vocalizations that can evolve over time  
-            4. **Bubble-net Feeding:** A group feeding strategy to corral fish
-            """, unsafe_allow_html=True)
-        
-        with tab2:
-            show_whale_lifecycle()
-    
-        with tab3:
-            feeding_conditions_page()
-    
-        with tab4:
-            st.plotly_chart(create_simplified_species_chart(), use_container_width=True)
-            st.caption("Graph generated using Plotly (https://plotly.com)")  # Citation for the graph
-            
-            col1, col2 = st.columns(2)
-            with col1:
-                st.markdown("""
-                ### Presence Level Guide
-                - **0:** Absent
-                - **1:** Low Presence
-                - **2:** Medium Presence
-                - **3:** High Presence
-                """)
-            with col2:
-                st.markdown("""
-                ### Peak Activity Periods
-                - 🐋 **Whales:** June - August
-                - 🐟 **Capelin:** June - July
-                - 🦐 **Krill:** April - September
-                - 🐠 **Herring:** May & August - September
-                """)
-            
-            st.info("""
-            ### Environmental Influences on Migration
-            - 🌊 Water temperature triggers movement patterns
-            - 🐟 Prey availability affects whale presence
-            - 🌡️ Seasonal changes impact all species
+            ### Species Overview
+            Humpback whales, Megaptera novaeangliae, are a highly migratory species exposed to a wide range of environmental factors during their lifetime.  
+            Renowned for their haunting songs and acrobatic breaches, these giants of the ocean captivate audiences worldwide.
             """)
-    
-        with tab5:
-            breeding_conditions_page()
-    
-        with tab6:
-            st.header("📚 Data Sources")
+            
             st.markdown("""
+            ### Key Characteristics
+            - 🏷 **Size:** Adults range Up to about 60 feet 
+            - ⚖ **Weight:** Can up to about 40 tons  
+            - ⌛ **Lifespan:** About 80 to 90 years  
+            - 🍽 **Diet:** Primarily krill and small fish, with specialized feeding techniques such as bubble-net feeding  
+            """)
+            
+            with st.expander("🤔 Did you know?"):
+                st.markdown("""
+                - 🎶 **Remarkable Songs:** Male humpbacks sing complex, evolving songs that can last 20 minutes or more.
+                - 🌏 **Epic Migrations:** They travel up to 8,000 kilometers annually between feeding and breeding grounds.
+                - 🦸 **Unique Physiology:** Their long pectoral fins, up to 5 meters, are the longest of any whale species relative to body size.
+                - 🤝 **Social Behavior:** Humpbacks often cooperate in hunting, showcasing advanced group coordination.
+                """)
+            
+        st.markdown("""
+        ### Behavior & Migration
+        Humpback whales undertake one of the longest migrations of any mammal, traveling between cold, nutrient-rich feeding grounds near the poles and warmer tropical breeding areas. This journey, spanning thousands of kilometers, is essential for their reproduction and population health.
+        
+        ### Conservation Status
+        Although humpback whale populations have rebounded significantly following a moratorium on commercial whaling, they continue to face various threats:
+        - 🚢 Ship strikes  
+        - 🏷 Entanglement in fishing gear  
+        - ♨️ Climate change impacts  
+        - 🔊 Ocean noise pollution
+        
+        ### Unique Features
+        1. **Pectoral Fins:** Exceptionally long, aiding in maneuverability  
+        2. **Breaching:** Dramatic leaps out of the water  
+        3. **Whale Songs:** Complex vocalizations that can evolve over time  
+        4. **Bubble-net Feeding:** A group feeding strategy to corral fish
+        """, unsafe_allow_html=True)
+
+    elif selected_tab == "🌊 Phases":
+        show_whale_lifecycle()
+
+    elif selected_tab == "📊 Feeding Conditions":
+        feeding_conditions_page()
+
+    elif selected_tab == "🗓️ Migration Patterns":
+        st.plotly_chart(create_simplified_species_chart(), use_container_width=True)
+        st.caption("Graph generated using Plotly (https://plotly.com)")  # Citation for the graph
+
+        col1, col2 = st.columns(2)
+        with col1:
+            st.markdown("""
+            ### Presence Level Guide
+            - **0:** Absent
+            - **1:** Low Presence
+            - **2:** Medium Presence
+            - **3:** High Presence
+            """)
+        with col2:
+            st.markdown("""
+            ### Peak Activity Periods
+            - 🐋 **Whales:** June - August
+            - 🐟 **Capelin:** June - July
+            - 🦐 **Krill:** April - September
+            - 🐠 **Herring:** May & August - September
+            """)
+
+        st.info("""
+        ### Environmental Influences on Migration
+        - 🌊 Water temperature triggers movement patterns
+        - 🐟 Prey availability affects whale presence
+        - 🌡️ Seasonal changes impact all species
+        """)
+
+    elif selected_tab == "🐟 Breeding Conditions":
+        breeding_conditions_page()
+
+    elif selected_tab == "📚 Data Sources":
+        st.header("📚 Data Sources")
+        st.markdown("""
             ### Useful References
             - **Ocean Networks Canada – API Source:**  
               Main API source for real-time sensor data.  
@@ -654,8 +665,10 @@ def migration_page():
               Meynecke, J-O., et al. (2021). *The Role of Environmental Drivers in Humpback Whale Distribution, Movement and Behavior: A Review*. Frontiers in Marine Science.  
               DOI: [10.3389/fmars.2021.720774](https://doi.org/10.3389/fmars.2021.720774)
             """)
+
     else:
-        st.warning("No data available. Please fetch real-time data using the sidebar controls.")
+        st.warning("No data available. We are under maintenance.")
+
 
 if __name__ == "__main__":
     migration_page()
